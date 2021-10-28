@@ -14,14 +14,12 @@ data = []
 def Dao():
     with open("test.txt", "r") as f:
         line = f.readline()
-        startTem:float = 0
         while line:
             if line[0] == '#':
                 line = f.readline()
                 continue
             items = line.strip().split()
-            dic_items = {'Year': int(items[0]), 'Temperature': float(items[1]) + startTem}
-            startTem = float(items[1]) + startTem
+            dic_items = {'Year': int(items[0]), 'Temperature': float(items[1])}
             data.append(dic_items)
             line = f.readline()
     pass
@@ -33,10 +31,10 @@ def handler(request):
     form = request.args.get('form', 'json')
     sub_data = []
     if request.args.get('reverse') == 'true':
-        sub_data = sorted(data[int(request.args.get('beginYear', 1880)) - 1880: int(request.args.get('endYear', 2010)) - 1880],\
+        sub_data = sorted(data[int(request.args.get('beginYear', 1880)) - 1880: int(request.args.get('endYear', 2010)) - 1879],\
                     key=lambda x:x[key], reverse=True)
     else:
-        sub_data = sorted(data[int(request.args.get('beginYear', 1880)) - 1880: int(request.args.get('endYear', 2010)) - 1880],\
+        sub_data = sorted(data[int(request.args.get('beginYear', 1880)) - 1880: int(request.args.get('endYear', 2010)) - 1879],\
                     key=lambda x:x[key])
     
     if form == 'json':
@@ -46,7 +44,7 @@ def handler(request):
     elif form == 'csv':
         fileName = 'data_csv.csv'
         fieldnames=sub_data[0].keys() 
-        with open(fileName,"wb") as csv_file:
+        with open(fileName,"w") as csv_file:
             writer=csv.writer(csv_file)
             writer.writerow(fieldnames)
             for dict in sub_data:
