@@ -40,7 +40,7 @@ def handler(request):
     if form == 'json':
         return json(sub_data)
     elif form == 'xml':
-        return text(parseString(dicttoxml(sub_data).decode('utf-8')).toprettyxml(indent='\t'))
+        return text(parseString(dicttoxml(sub_data).decode('utf-8')).toprettyxml(indent=' '))
     elif form == 'csv':
         fileName = 'data_csv.csv'
         fieldnames=sub_data[0].keys() 
