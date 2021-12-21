@@ -6,12 +6,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import statsmodels.api as sm
 
-async def getGraph(x:np.ndarray, y:np.ndarray):
-    # plt.scatter(x, y)
-    plt.plot(x, y)
-    pass
-
-
 async def process(X:np.ndarray, Y:np.ndarray):
     lowess = sm.nonparametric.lowess
     n = np.size(X, 0);
@@ -37,8 +31,12 @@ async def main(params):
                 z = await process(np.array(x), np.array(y))
                 for a, b, c in zip(x, y, z):
                     print(a, b, round(c, 2))
-                await getGraph(x, y)
-                await getGraph(x, z)
+                
+                plt.xlabel("YEAR")
+                plt.ylabel("Temperature Index (C)")
+                plt.plot(x, y, "o:", color='grey', label="No_Smoothing")
+                plt.plot(x, z, "k", label="Lowess(5)")
+                plt.legend()
                 plt.savefig('./test.jpg', dpi=200)
 
             else:
